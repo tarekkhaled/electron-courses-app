@@ -1,0 +1,14 @@
+{
+  "name": "courses",
+  "version": "1.0.0",
+  "description": "courses i should take",
+  "main": "main/app.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Tarek Khaled",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^5.0.7"
+  }
+}
