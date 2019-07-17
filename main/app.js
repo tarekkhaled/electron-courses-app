@@ -31,7 +31,8 @@ function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        window = null
+        app.quit();
+        window = null;
     })
 
 
@@ -56,8 +57,45 @@ function popupWindowFn() {
     popupWindow = new BrowserWindow({
         width : 300 ,
         height : 300,
-        title : 'Add New Course'
+        title : 'Add New Course',
+        show : false 
     });
+    popupWindow.once('ready-to-show',()=>{
+        popupWindow.show();
+    })
+
+    popupWindow.loadFile(`${__dirname}/popup.html`)
+}
+
+
+function handleSomeMenuTestCases() {
+
+    
+    if(process.platform === 'darwin ') {
+        menuTemplate.unshift({}) ; // take the argument and pass it first and shift the rest of menuTemplate
+    }
+    
+    
+    if(process.env.NODE_ENV !== 'production')  {
+        menuTemplate.push({
+            label : 'userCantSeeThis',
+            submenu : [
+                {
+                    label : 'Toggle Developer Tools',
+                    accelerator : 'CTRL+SHIFT+I',
+                    click(item,focusedWindow) {
+                        /* focused Window when we move mouse to specific window */
+                        focusedWindow.toggleDevTools(); // embedded function in electron 
+                    }
+                }
+            ]
+        }) /* it will add a new entry to our menu */
+    }
+    // production 
+    // development
+    // staging 
+    // test
+    
 }
 
 app.on('ready' , createWindow);
@@ -88,6 +126,5 @@ const menuTemplate = [
 ]
 
 
-if(process.platform === 'darwin ') {
-    menuTemplate.unshift({}) ; // take the argument and pass it first and shift the rest of menuTemplate
-}
+handleSomeMenuTestCases();
+
