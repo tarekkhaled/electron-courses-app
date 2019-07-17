@@ -16,6 +16,11 @@
         const electron = require('electron');
         const {ipcRenderer} = electron ; 
         
+        function clearScreenFn() {
+         
+        }
+
+        
         function renderTheCourse(value) {
             const elment = document.createElement('li')
             const body = document.querySelector('.show-result')
@@ -25,6 +30,10 @@
 
         ipcRenderer.on('course-ready-to-render-it', (event,value)=>{
             renderTheCourse(value) ;
+        })
+
+        ipcRenderer.on('clear-request',()=>{
+            document.querySelector('.show-result').innerHTML = ''        
         })
     </script>
 </body>

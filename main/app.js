@@ -106,7 +106,14 @@ function handleSomeMenuTestCases() {
     
 }
 
+function clearScreenFnSending() {
+    window.webContents.send('clear-request')
+}
+
+
 app.on('ready' , createWindow);
+
+
 
 
 const menuTemplate = [
@@ -118,6 +125,14 @@ const menuTemplate = [
                 accelerator : 'CTRL+N',
                 click() {
                     popupWindowFn();
+                }
+            },
+
+            {
+                label : 'Clear Courses',
+                accelerator : 'CTRL+D',
+                click() {
+                    clearScreenFnSending()
                 }
             },
             {
