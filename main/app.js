@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {app,BrowserWindow,Menu} = electron;
+const {app,BrowserWindow,Menu,ipcMain} = electron;
 
 let window,popupWindow; 
 
@@ -58,13 +58,20 @@ function popupWindowFn() {
         width : 300 ,
         height : 300,
         title : 'Add New Course',
-        show : false 
+        show : false ,
+        webPreferences : {
+            nodeIntegration : true
+        }
     });
     popupWindow.once('ready-to-show',()=>{
         popupWindow.show();
     })
 
-    popupWindow.loadFile(`${__dirname}/popup.html`)
+    popupWindow.loadFile(`${__dirname}/popup.html`);
+
+    popupWindow.on('closed',()=>{
+        popupWindow = null ; // this important for ram and get out of garabge 
+    })
 }
 
 
@@ -80,6 +87,7 @@ function handleSomeMenuTestCases() {
         menuTemplate.push({
             label : 'userCantSeeThis',
             submenu : [
+                { role : 'reload'} , // they want to have to label to reload command save our time 
                 {
                     label : 'Toggle Developer Tools',
                     accelerator : 'CTRL+SHIFT+I',
@@ -107,7 +115,7 @@ const menuTemplate = [
         submenu : [
             {
                 label : 'Add Course',
-                accelerator : 'N',
+                accelerator : 'CTRL+N',
                 click() {
                     popupWindowFn();
                 }
@@ -125,6 +133,11 @@ const menuTemplate = [
     }
 ]
 
+
+ipcMain.on('course-to-show',(event,value)=>{
+    window.webContents.send('course-ready-to-render-it',value)    ;
+    popupWindow.close(); // automatically close it 
+})
 
 handleSomeMenuTestCases();
 

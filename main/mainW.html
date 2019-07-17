@@ -7,6 +7,25 @@
     <title>Courses App</title>
 </head>
 <body>
-    <p>Hello its me</p>
+    <p>My Courses</p>
+    <ul class="show-result">
+        
+    </ul>
+
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron ; 
+        
+        function renderTheCourse(value) {
+            const elment = document.createElement('li')
+            const body = document.querySelector('.show-result')
+            elment.textContent = value 
+            body.appendChild(elment)
+        }
+
+        ipcRenderer.on('course-ready-to-render-it', (event,value)=>{
+            renderTheCourse(value) ;
+        })
+    </script>
 </body>
 </html>
